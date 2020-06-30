@@ -1,11 +1,71 @@
+# marapp-infra
+
+
+marapp requires a set of infrastructure-level services into which to deploy application-level environments and their resources. This is meant to be used only once, as it can accomodate any number of marapp environments.
+
+This is a [Terraform](https://terraform.io) module meant to provision these services in AWS
+
+To get started you will need the following:
+- [Terraform 0.12](https://terraform.io)
+- [AWS CLI 2.0](https://aws.amazon.com/cli/)
+- A set of valid AWS Administrator or PowerUser Credentials
+- [if provisioning a [MongoDB Atlas cluster](https://cloud.mongodb.com)]:
+  - a set of MongoDB Atlas Credentials (a pair of public-private keys)
+
+# Installation
+
+Follow these instructions after installing both Terraform and AWS CLI:
+
+1. Configure AWS Credentials
+
+    Type `aws configure` and input the aforementioned AWS credentials, including the region where you want to deploy the infrastructure stack into
+
+2. Initialize Terraform modules
+    
+    Navigate to the `src` directory inside this repository and type `terraform init`
+
+3. Fill in input variables
+  
+    Open up `terraform.tfvars` and change default variable values to meet your need
+
+    The following variables will provision additional resources based on their value:
+
+    - `create_elasticache_redis_node` - will provision a Redis node in AWS, set to `false` if you're using your own Redis node cluster
+
+    - `create_elasticsearch_cluster` - will provision an Elasticsearch cluster in AWS, set to `false` if you're using your own Elasticsearch cluster
+
+    - `create_mongodb_atlas_resources` - will provision a MongoDB cluster in MongoDB Atlas, set to `false` if you're using your own MongoDB cluster
+        - To provision this resource you will need a set of valid API credentials generated using the [MongoDB Atlas](https://cloud.mongodb.com) dashboard
+        - Controls to generate API keys can be found in your Organization's Access Manager page, under the API Keys tab
+
+4. Run and visualize a provisioning plan
+    
+    Run `terraform plan`
+
+    This serves to validate your input variables and credentials, and to perform a dry-run against your AWS account. It outputs a plan and a summary of resources to-be-created
+
+5. Apply provisioning plan
+
+    Run `terraform apply`
+
+    This will have the same behaviour as `terraform plan`, with the added difference of prompting you to accept the planned changes
+
+    Simply input `yes` when prompted, and a live feed of resources being provisioned is displayed
+
+6. Inspect the output
+
+    At the end of a successful apply, a set of variables and their values shall be output, to be used in further provisioning application environments
+
+    These can be found [here](#Outputs)
+
+---
+
 ## Requirements
 
 | Name | Version |
 |------|---------|
 | terraform | >= 0.12 |
-| aws | ~> 2.0 |
-| mongodbatlas | ~> 0.5 |
-| random | ~> 2.2 |
+| aws-cli | ~> 2.0 |
 
 ## Providers
 
