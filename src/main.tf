@@ -18,17 +18,28 @@
 */
 
 terraform {
-  required_version = ">= 0.12"
+  required_version = ">= 0.13"
+
+  backend "http" {}
+
   required_providers {
-    aws          = "~> 2.0"
-    mongodbatlas = "~> 0.5"
-    random       = "~> 2.2"
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 2.0"
+    }
+    mongodbatlas = {
+      source  = "mongodb/mongodbatlas"
+      version = "~> 0.7"
+    }
+    random = {
+      source  = "hashicorp/random"
+      version = "~> 2.2"
+    }
   }
 }
 
 provider "aws" {
   region = var.aws_region
-
 }
 
 provider "mongodbatlas" {

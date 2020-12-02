@@ -69,16 +69,16 @@ resource "mongodbatlas_project_ip_whitelist" "ip_whitelist" {
   comment    = "${var.stack_identifier} AWS VPC CIDR"
 }
 
-resource "random_string" "mongodbatlas_database_user_password" {
+resource "random_password" "mongodbatlas_database_user_password" {
   length           = 16
   special          = true
-  override_special = "@£$"
+  override_special = "_%@"
 }
 
 resource "mongodbatlas_database_user" "user" {
   count              = var.create_mongodb_atlas_resources ? 1 : 0
   username           = "${var.stack_identifier}Admin"
-  password           = random_string.mongodbatlas_database_user_password.result
+  password           = random_password.mongodbatlas_database_user_password.result
   project_id         = mongodbatlas_project.project[0].id
   auth_database_name = "admin"
 
