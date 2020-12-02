@@ -1,0 +1,53 @@
+include:
+    - template: Terraform.latest.gitlab-ci.yml
+  
+variables:
+    # If not using GitLab's HTTP backend, remove this line and specify TF_HTTP_* variables
+    TF_STATE_NAME: default
+    TF_CACHE_KEY: default
+    TF_ROOT: ${CI_PROJECT_DIR}/src
+
+before_script:
+    - cd ${TF_ROOT}
+    
+stages:
+- prepare
+- validate
+- build
+- deploy
+
+init:
+    stage: prepare
+    script:
+        - gitlab-terraform init
+
+validate:
+    stage: validate
+    script:
+        - gitlab-terraform validate
+
+build:
+    stage: build
+    script:
+        - gitlab-terraform plan
+        - gitlab-terraform plan-json
+    artifacts:
+        name: plan
+        paths:
+            - ${TF_ROOT}/plan.cache
+        reports:
+            terraform: ${TF_ROOT}/plan.json
+
+apply:
+    stage: deploy
+    environment:
+        name: production
+    script:
+        - gitlab-terraform apply
+    dependencies:
+        - build
+    when: manual
+    only:
+        - gitlab
+        - master
+        - develop
