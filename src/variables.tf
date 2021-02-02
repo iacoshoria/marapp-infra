@@ -54,7 +54,7 @@ variable "private_subnet_cidrs" {
   type        = list
 }
 
-# MongoDB Atlas 
+# MongoDB Atlas
 variable "create_mongodb_atlas_resources" {
   description = "Set to `true` to create MongoDB Atlas resources."
   type        = bool
@@ -88,19 +88,19 @@ variable "mongodb_atlas_project_name" {
 variable "mongodb_atlas_cluster_disk_size" {
   description = "Disk size for the MongoDB Atlas cluster. To be used in conjunction with the `create_mongodb_atlas_resources` variable"
   type        = number
-  default     = 210
+  default     = 20
 }
 
 variable "mongodb_atlas_cluster_disk_iops" {
   description = "Provisioned IOPS for the MongoDB Atlas cluster. To be used in conjunction with the `create_mongodb_atlas_resources` variable"
   type        = number
-  default     = 630
+  default     = 100
 }
 
 variable "mongodb_atlas_cluster_instance_size" {
   description = "Instance size for the MongoDB Atlas cluster. To be used in conjunction with the `create_mongodb_atlas_resources` variable. Documented under `providerSettings.instanceSizeName`: https://docs.atlas.mongodb.com/reference/api/clusters-create-one/"
   type        = string
-  default     = "M40"
+  default     = "M10"
 }
 
 variable "mongodb_atlas_cluster_aws_region" {
